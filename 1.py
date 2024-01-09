@@ -174,12 +174,7 @@ def timeAlign(S_a, S_g):
     shift = int(round(kpeak - (len(z) + 1)/2))
     
     
-    output1='|<span style="font-family:Ariel;font-size:20px">**Sub-integer accuracy**</span>|\n' + \
-            '|<span style="font-family:Ariel;font-size:16px">*Peak val*: ${}$ at index *k*: ${}$</span>|\n'.format(np.round(peak_val,4), kpeak) + \
-            '|<span style="font-family:Ariel;font-size:16px">*Computed shift*: ${}$ *samples*</span>|'.format(shift+1) 
-    
-    output = '<center>\n\n'+output+output1+'\n\n</center>'
-    print(output)
+    # print(output)
     #display(md(output))
     
 #     if shift == 1:
