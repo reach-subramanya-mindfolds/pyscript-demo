@@ -24,6 +24,8 @@ from decimal import *
 import copy
 import datetime
 
+from pyodide.http import open_url
+
 def datetime_pytom(d):
     '''
     Description
@@ -203,9 +205,10 @@ def readIMUSegments(urls):
     for k in range(n):
         C = urls[k].split("/")
         #print('GET segment:',C[len(C)-1])
-        r = requests.get(url = urls[k])
-        decoded_content = r.content.decode('utf-8')
-        cr = csv.reader(decoded_content.splitlines(), delimiter=',')
+        #r = requests.get(url = urls[k])
+        r = (open_url(urls[k]).read())
+        #decoded_content = r.content.decode('utf-8')
+        cr = csv.reader(r.splitlines(), delimiter=',')
         my_list = list(cr)
         for row in my_list:
             e1 = int(row[0])
@@ -293,9 +296,12 @@ URL = atmosURL + "/capture_sessions/" + str(session_id) + "/content_urls"
 req_url = atmosURL + "/capture_sessions/" + str(session_id)
 
 # sending get request and saving the response as response object
-r_url = requests.get(url = req_url)
+#r_url = requests.get(url = req_url)
+r_url = json.loads(open_url(req_url).read())
 
-r_data = r_url.json()
+print(r_url)
+
+r_data = r_url
 #r_data = str(r_data)
 #r_data = r_data.replace("'", '"')
 
@@ -305,10 +311,11 @@ cap_sess = copy.deepcopy(request_url)
 
 
 # sending get request and saving the response as response object
-r = requests.get(url = URL)
+#r = requests.get(url = URL)
+r = json.loads(open_url(URL).read())
 
 # extracting data in json format
-data = r.json()
+data = r
 
 content_urls = data
 
@@ -318,14 +325,16 @@ S_acc_t, S_acc_tstamps, S_acc_counter, S_acc_values, S_acc_Ts = readIMUSegments(
 S_acc_values = S_acc_values * 1000 / 9.81 #units of mg
 S_acc = [S_acc_t, S_acc_tstamps, S_acc_counter, S_acc_values, S_acc_Ts]
 
-print(S_acc)
+#print(S_acc[3])
 
 S_gyro_t, S_gyro_tstamps, S_gyro_counter, S_gyro_values, S_gyro_Ts = readIMUSegments(content_urls['THETAX.gyro']) 
 S_gyro_values = S_gyro_values * 180 / pi #units of dps
 S_gyro = [S_gyro_t, S_gyro_tstamps, S_gyro_counter, S_gyro_values, S_gyro_Ts]
 
-print(S_gyro)
+#print(S_gyro[3])
 
 IMU_acc_x = S_acc[3][:,0]
 IMU_acc_y = S_acc[3][:,1]
 IMU_acc_z = S_acc[3][:,2]
+
+print(IMU_acc_x[1])

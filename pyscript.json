@@ -3,6 +3,7 @@
         "arrr",
         "requests",
         "numpy",
-        "matplotlib"
+        "matplotlib",
+        "pyodide-http"
 ]
 }
