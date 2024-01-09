@@ -153,9 +153,6 @@ def timeAlign(S_a, S_g):
     # rough peak location:
     peak_val = max(z)
     kpeak = np.argmax(z)
-    output='|<span style="font-family:Ariel;font-size:20px">Timestamps Cross-Covariance</span>|\n' + \
-           '|:---|\n' +\
-           '|<span style="font-family:Ariel;font-size:16px">*Peak val*: ${}$ at index *k*: ${}$|</span>|\n'.format(np.round(peak_val,4),kpeak)
 
     # peak location with sub-integer accuracy:
     ind = [*range(-neighborhood_half_width,neighborhood_half_width+1)]
