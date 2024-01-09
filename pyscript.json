@@ -1,3 +1,8 @@
 {
-    "packages": ["arrr"]
+    "packages": [
+        "arrr",
+        "requests",
+        "numpy",
+        "matplotlib"
+]
 }
