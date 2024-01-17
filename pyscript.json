@@ -1,7 +1,6 @@
 {
     "packages": [
         "arrr",
-        "requests",
         "numpy",
         "matplotlib",
         "pandas",
