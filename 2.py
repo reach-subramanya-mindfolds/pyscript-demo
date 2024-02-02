@@ -11,6 +11,8 @@ from decimal import Decimal
 from fractions import Fraction
 #from scipy.linalg import norm
 from pandas import DataFrame
+from pyscript import document
+
 
 def noiseModel():
 
@@ -228,6 +230,24 @@ def stateTransition(x, u, dt, Ka):
 
 dt = IMU_dt
 
+def loadOtherData(event):
+    with open('shared_data.txt','r') as file:
+        exec(file.read())
+        # print("IMU_acc_x:", IMU_acc_x)
+        output_ta = document.querySelector("#output2")
+        output_ta.innerText = str(IMU_acc_x)
+
+
+
+
+
+# print("IMU_acc_x:", IMU_acc_x)
+# print("IMU_acc_y:", IMU_acc_y)
+# print("IMU_acc_z:", IMU_acc_z)
+# print("IMU_gyro_x:", IMU_gyro_x)
+# print("IMU_gyro_y:", IMU_gyro_y)
+# print("IMU_gyro_z:", IMU_gyro_z)
+# print("IMU_dt11:", IMU_dt)    
 
 #% this indirectly controls the smoothing of the attitude estimate
 Ka = 0.9956 * np.identity(3, dtype="float") #% 2.0 s time constant
@@ -381,4 +401,4 @@ OUTPUT = np.matrix(OUTPUT) * 1000
 # % count walking steps
 CORRECTION = np.matrix(CORRECTION)
 
-print(STATE)
+# print(STATE) uncomment later

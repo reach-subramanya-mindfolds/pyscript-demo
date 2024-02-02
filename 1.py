@@ -25,8 +25,11 @@ from decimal import *
 import copy
 import datetime
 import math
+import js
+import time
 
 from pyodide.http import open_url
+from pyscript import document
 
 def datetime_pytom(d):
     '''
@@ -281,6 +284,7 @@ def readIMUSegments(urls):
     
     return S_t, S_tstamps, S_counter, S_values, S_Ts
 
+  
 #------------------------------------------------------------------
 
 #------------------------------------------------------------------
@@ -294,6 +298,29 @@ def readIMUSegments(urls):
 
 # add a widget later to read the capture session
 
+def loadIMUData(event):
+
+    # Check if the button is clicked
+    # if not button1_clicked:
+    #     # If not clicked, set the flag and return
+    #     global button1_clicked
+    #     button1_clicked = True
+    #     return
+        
+    while not content_urls or not r_url:
+        time.sleep(1)
+
+    result = str(content_urls) + str(r_url)
+    # print("Result from loadIMUData:", result)
+    output_ta = document.querySelector("#output")
+    enableLoad2Button()
+    output_ta.innerText = result
+
+
+def enableLoad2Button():
+    document.getElementById('button2').disabled = False
+
+    
 # api-endpoint
 pi = 3.1415926535897932384626433832795
 session_id=1336
@@ -305,7 +332,7 @@ req_url = atmosURL + "/capture_sessions/" + str(session_id)
 #r_url = requests.get(url = req_url)
 r_url = json.loads(open_url(req_url).read())
 
-print(r_url)
+print("r_url",r_url) 
 
 r_data = r_url
 #r_data = str(r_data)
@@ -325,7 +352,8 @@ data = r
 
 content_urls = data
 
-print(content_urls)
+
+print("content_urls",content_urls) 
 
 S_acc_t, S_acc_tstamps, S_acc_counter, S_acc_values, S_acc_Ts = readIMUSegments(content_urls['THETAX.acc']) 
 S_acc_values = S_acc_values * 1000 / 9.81 #units of mg
@@ -409,5 +437,48 @@ IMU_gyro_x = S_gyro[3][:,0]
 IMU_gyro_y = S_gyro[3][:,1]
 IMU_gyro_z = S_gyro[3][:,2]
 
-print(IMU_acc_x[1])
+# with open('shared_data.txt', 'w') as file:
+#     file.write(f"IMU_acc_x = {IMU_acc_x.tolist()}\n")
+#     file.write(f"IMU_acc_y = {IMU_acc_y.tolist()}\n")
+#     file.write(f"IMU_acc_z = {IMU_acc_z.tolist()}\n")
+#     file.write(f"IMU_gyro_x = {IMU_gyro_x.tolist()}\n")
+#     file.write(f"IMU_gyro_y = {IMU_gyro_y.tolist()}\n")
+#     file.write(f"IMU_gyro_z = {IMU_gyro_z.tolist()}\n")
+#     file.write(f"IMU_dt = {IMU_dt}\n")
+
+with open('shared_data.txt', 'w') as file:
+    file.write(f"IMU_acc_x = {IMU_acc_x.tolist()}\n")
+    file.write(f"IMU_acc_y = {IMU_acc_y.tolist()}\n")
+    file.write(f"IMU_acc_z = {IMU_acc_z.tolist()}\n")
+    file.write(f"IMU_gyro_x = {IMU_gyro_x.tolist()}\n")
+    file.write(f"IMU_gyro_y = {IMU_gyro_y.tolist()}\n")
+    file.write(f"IMU_gyro_z = {IMU_gyro_z.tolist()}\n")
+    file.write(f"IMU_dt = {IMU_dt}\n")
+
+# print(IMU_acc_x[1]) 
+
+# while not content_urls or not r_url:
+#     time.sleep(1)
+
+# js.document.getElementById('output').value = str(content_urls) + str(r_url)
+
+  
+
+# output_data = {
+#     'IMU_acc_x': IMU_acc_x.tolist(),
+#     'IMU_acc_y': IMU_acc_y.tolist(),
+#     'IMU_acc_z': IMU_acc_z.tolist(),
+#     'IMU_gyro_x': IMU_gyro_x.tolist(),
+#     'IMU_gyro_y': IMU_gyro_y.tolist(),
+#     'IMU_gyro_z': IMU_gyro_z.tolist()
+# }
+
+# # Convert the Python list to a JavaScript array
+# js_output = json.dumps(output_data)
+
+# # Use PyScript to execute JavaScript code in the browser
+# js_code = f"document.getElementById('output').value = {js_output};"
+# window.exec(js_code)
+
+
 #--------------------------------------------------------------------
